@@ -9,5 +9,5 @@
         "lib": ["dom", "es2015"],
         "esModuleInterop": true
     },
-    "exclude": ["dist", "lib/tests"]
+    "exclude": ["dist", "src/tests"]
 }
