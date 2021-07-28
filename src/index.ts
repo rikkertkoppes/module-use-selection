@@ -36,18 +36,18 @@ const useGlobal = globalHook<SelectionState, SelectionActions>(
     actions
 );
 
-export const useSelectionItem = (
-    selectionKey: string,
-    itemKey: string
-): [boolean, (multiple?: boolean) => void] => {
-    let [state, actions] = useGlobal(
+export const useSelectionItem = (selectionKey: string, itemKey: string) => {
+    let [selected, actions] = useGlobal(
         (state: SelectionState) => !!(state[selectionKey] || {})[itemKey]
     );
     let select = (multiple?: boolean) => {
         actions.select(selectionKey, [itemKey], multiple);
     };
+    let clear = () => {
+        actions.select(selectionKey, []);
+    };
 
-    return [state, select];
+    return { selected, select, clear };
 };
 
 export const useSelection = (selectionKey: string) => {
