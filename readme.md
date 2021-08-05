@@ -20,7 +20,7 @@ use `useSelectionItem` in the context of a single item
 const TableRow = ({ rowId }) => {
     // "rows" is the key for the selection
     // rowId is the key for the item
-    let [selected, select] = useSelectionItem("rows", rowId);
+    let { selected, select, clear } = useSelectionItem("rows", rowId);
 
     return (
         <tr
