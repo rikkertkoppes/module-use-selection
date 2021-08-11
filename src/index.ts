@@ -1,68 +1,69 @@
-import React from "react";
-import globalHook, { Store } from "use-global-hook";
+import create from "zustand";
 
 type Selection = Record<string, boolean>;
-interface SelectionState {
-    [key: string]: Selection;
-}
 
-interface SelectionActions {
+interface SelectionState {
+    selections: {
+        [key: string]: Selection;
+    };
     select: (
         selectionKey: string,
         itemKeys: string[],
         multiple?: boolean
     ) => void;
+    clear: (selectionKey: string) => void;
+    items: (selectionKey: string) => string[];
 }
 
-const initialState = {};
-
-const actions = {
-    select: (
-        store: Store<SelectionState, SelectionActions>,
-        selectionKey: string,
-        itemKeys: string[],
-        multiple?: boolean
-    ) => {
-        let state = store.state[selectionKey] || {};
-        let selection = multiple ? { ...state } : {};
-        itemKeys.forEach((key) => (selection[key] = !state[key]));
-        store.setState({ ...store.state, [selectionKey]: selection });
+export const useSelectionState = create<SelectionState>((set, get) => ({
+    selections: {},
+    select: (selectionKey: string, itemKeys: string[], multiple?: boolean) => {
+        let selections = get().selections;
+        let sel = selections[selectionKey] || {};
+        let selection = multiple ? { ...sel } : {};
+        itemKeys.forEach((key) => (selection[key] = !sel[key]));
+        set({ selections: { ...selections, [selectionKey]: selection } });
     },
-};
-
-const useGlobal = globalHook<SelectionState, SelectionActions>(
-    React,
-    initialState,
-    actions
-);
+    clear: (selectionKey: string) => {
+        return get().select(selectionKey, []);
+    },
+    items: (selectionKey: string) => {
+        let selections = get().selections;
+        let sel = selections[selectionKey] || {};
+        return Object.keys(sel).filter((key) => sel[key]);
+    },
+}));
 
 export const useSelectionItem = (selectionKey: string, itemKey: string) => {
-    let [selected, actions] = useGlobal(
-        (state: SelectionState) => !!(state[selectionKey] || {})[itemKey]
+    let selected = useSelectionState(
+        ({ selections }: SelectionState) =>
+            !!(selections[selectionKey] || {})[itemKey]
     );
+    let selectItem = useSelectionState(({ select }: SelectionState) => select);
     let select = (multiple?: boolean) => {
-        actions.select(selectionKey, [itemKey], multiple);
+        selectItem(selectionKey, [itemKey], multiple);
     };
     let clear = () => {
-        actions.select(selectionKey, []);
+        selectItem(selectionKey, []);
     };
 
     return { selected, select, clear };
 };
 
 export const useSelection = (selectionKey: string) => {
-    let [state, actions] = useGlobal(
-        (state: SelectionState) => state[selectionKey] || {}
+    let selection = useSelectionState(
+        ({ selections }: SelectionState) => selections[selectionKey] || {}
     );
+    let selectItem = useSelectionState(({ select }: SelectionState) => select);
 
-    let items = Object.keys(state).filter((key) => !!state[key]);
+    let items = Object.keys(selection).filter((key) => !!selection[key]);
 
     let selected = (itemKey: string) => {
-        return !!state[itemKey];
+        return !!selection[itemKey];
     };
 
     let select = (itemKeys: string[], multiple?: boolean) => {
-        actions.select(selectionKey, itemKeys, multiple);
+        selectItem(selectionKey, itemKeys, multiple);
     };
 
     let clear = () => {

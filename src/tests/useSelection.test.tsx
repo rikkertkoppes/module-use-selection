@@ -6,7 +6,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import useSelection from "..";
+import useSelection, { useSelectionState } from "..";
 
 function TestComponent() {
     let selection = useSelection("foo");
@@ -29,7 +29,10 @@ function TestComponent() {
     );
 }
 
-describe("useInner", () => {
+describe("useSelection", () => {
+    beforeEach(() => {
+        useSelectionState.getState().clear("foo");
+    });
     test("initial state should be empty", () => {
         let { getByTestId } = render(<TestComponent />);
         let div = getByTestId("testcomponent");
@@ -61,5 +64,14 @@ describe("useInner", () => {
         userEvent.click(getByTestId("sel1"));
         userEvent.click(getByTestId("sel2"), { ctrlKey: true });
         expect(div.textContent).toBe("onetwo");
+    });
+    test("should have access to the selection", () => {
+        let { getByTestId } = render(<TestComponent />);
+        userEvent.click(getByTestId("sel1"));
+        userEvent.click(getByTestId("sel2"), { ctrlKey: true });
+        expect(useSelectionState.getState().items("foo")).toEqual([
+            "one",
+            "two",
+        ]);
     });
 });
