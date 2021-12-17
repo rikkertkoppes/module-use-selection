@@ -1,11 +1,14 @@
+import React from "react";
 import create from "zustand";
 
 type Selection = Record<string, boolean>;
 
+const emptySelection = {};
 interface SelectionState {
     selections: {
         [key: string]: Selection;
     };
+    getSelection: (selectionKey: string) => Selection;
     select: (
         selectionKey: string,
         itemKeys: string[],
@@ -17,6 +20,9 @@ interface SelectionState {
 
 export const useSelectionState = create<SelectionState>((set, get) => ({
     selections: {},
+    getSelection: (selectionKey: string) => {
+        return get().selections[selectionKey] || emptySelection;
+    },
     select: (selectionKey: string, itemKeys: string[], multiple?: boolean) => {
         let selections = get().selections;
         let sel = selections[selectionKey] || {};
@@ -35,24 +41,23 @@ export const useSelectionState = create<SelectionState>((set, get) => ({
 }));
 
 export const useSelectionItem = (selectionKey: string, itemKey: string) => {
-    let selected = useSelectionState(
-        ({ selections }: SelectionState) =>
-            !!(selections[selectionKey] || {})[itemKey]
+    let selected = useSelectionState(({ getSelection }: SelectionState) =>
+        getSelection(selectionKey)
     );
     let selectItem = useSelectionState(({ select }: SelectionState) => select);
     let select = (multiple?: boolean) => {
         selectItem(selectionKey, [itemKey], multiple);
     };
-    let clear = () => {
+    let clear = React.useCallback(() => {
         selectItem(selectionKey, []);
-    };
+    }, [selectionKey]);
 
     return { selected, select, clear };
 };
 
 export const useSelection = (selectionKey: string) => {
-    let selection = useSelectionState(
-        ({ selections }: SelectionState) => selections[selectionKey] || {}
+    let selection = useSelectionState(({ getSelection }: SelectionState) =>
+        getSelection(selectionKey)
     );
     let selectItem = useSelectionState(({ select }: SelectionState) => select);
 
