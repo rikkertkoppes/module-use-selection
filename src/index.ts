@@ -40,8 +40,9 @@ export const useSelectionState = create<SelectionState>((set, get) => ({
 }));
 
 export const useSelectionItem = (selectionKey: string, itemKey: string) => {
-    let selected = useSelectionState(({ getSelection }: SelectionState) =>
-        getSelection(selectionKey)
+    let selected = useSelectionState(
+        ({ getSelection }: SelectionState) =>
+            !!getSelection(selectionKey)[itemKey]
     );
     let selectItem = useSelectionState(({ select }: SelectionState) => select);
     let select = (multiple?: boolean) => {
