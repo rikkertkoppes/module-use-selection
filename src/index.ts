@@ -1,4 +1,3 @@
-import React from "react";
 import create from "zustand";
 
 type Selection = Record<string, boolean>;
@@ -48,9 +47,9 @@ export const useSelectionItem = (selectionKey: string, itemKey: string) => {
     let select = (multiple?: boolean) => {
         selectItem(selectionKey, [itemKey], multiple);
     };
-    let clear = React.useCallback(() => {
+    let clear = () => {
         selectItem(selectionKey, []);
-    }, [selectionKey]);
+    };
 
     return { selected, select, clear };
 };
