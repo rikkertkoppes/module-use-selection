@@ -20,7 +20,11 @@ interface SelectionState {
 export const useSelectionState = create<SelectionState>((set, get) => ({
     selections: {},
     getSelection: (selectionKey: string) => {
-        return get().selections[selectionKey] || emptySelection;
+        let selections = get().selections;
+        if (selections[selectionKey]) return selections[selectionKey];
+        let newSelection = { ...selections, [selectionKey]: {} };
+        set({ selections: newSelection });
+        return newSelection[selectionKey];
     },
     select: (selectionKey: string, itemKeys: string[], multiple?: boolean) => {
         let selections = get().selections;
