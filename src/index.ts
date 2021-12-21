@@ -27,10 +27,20 @@ export const useSelectionState = create<SelectionState>((set, get) => ({
         return newSelection[selectionKey];
     },
     select: (selectionKey: string, itemKeys: string[], multiple?: boolean) => {
+        /**
+         * when multiple is off
+         * -> select only everything that was clicked, disregarding the old selection
+         * when multiple is on
+         * -> if all items already selected, deselect them from the selection
+         * -> otherwise, add them to the selection
+         */
         let selections = get().selections;
         let sel = selections[selectionKey] || {};
+        let allSelected = itemKeys.every((key) => sel[key]);
         let selection = multiple ? { ...sel } : {};
-        itemKeys.forEach((key) => (selection[key] = !sel[key]));
+        itemKeys.forEach(
+            (key) => (selection[key] = !(multiple && allSelected))
+        );
         set({ selections: { ...selections, [selectionKey]: selection } });
     },
     clear: (selectionKey: string) => {

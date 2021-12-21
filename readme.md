@@ -12,6 +12,15 @@ npm install @rkmodules/use-selection
 import useSelection from "@rkmodules/use-selection";
 ```
 
+# behaviour
+
+When the multiple flag is off, the items passed into `select` are selected. Everything else is deselected. So it disregards any existing selection
+
+When the multiple flag is on, the bahaviour is twofold:
+
+-   when all items passed into `select` are already selected, they are subtracted from the existing selection
+-   otherwise, they are added to the existing selection
+
 # examples
 
 use `useSelection` to handle an entire selection as a whole

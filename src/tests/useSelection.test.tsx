@@ -38,12 +38,12 @@ describe("useSelection", () => {
         let div = getByTestId("testcomponent");
         expect(div.textContent).toBe("");
     });
-    test("initial state should be empty after clicking two times", () => {
+    test("should select one after clicking two times", () => {
         let { getByTestId } = render(<TestComponent />);
         let div = getByTestId("testcomponent");
         getByTestId("sel1").click();
         getByTestId("sel1").click();
-        expect(div.textContent).toBe("");
+        expect(div.textContent).toBe("one");
     });
     test("should select one by clicking it", () => {
         let { getByTestId } = render(<TestComponent />);
