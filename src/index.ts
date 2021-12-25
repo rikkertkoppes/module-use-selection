@@ -69,6 +69,22 @@ export const useSelectionItem = (selectionKey: string, itemKey: string) => {
     return { selected, select, clear };
 };
 
+export const useSelect = (selectionKey: string) => {
+    let selectItem = useSelectionState(({ select }: SelectionState) => select);
+
+    let select = (itemKeys: string[], multiple?: boolean) => {
+        selectItem(selectionKey, itemKeys, multiple);
+    };
+
+    let clear = () => {
+        return select([]);
+    };
+    return {
+        select,
+        clear,
+    };
+};
+
 export const useSelection = (selectionKey: string) => {
     let selection = useSelectionState(({ getSelection }: SelectionState) =>
         getSelection(selectionKey)

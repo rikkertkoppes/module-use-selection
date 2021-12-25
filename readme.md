@@ -68,6 +68,8 @@ const TableRow = ({ rowId }) => {
 };
 ```
 
+use `useSelect` to only get `select` and clear `methods`, these do not update when the selection changes, preventing rerenders
+
 # project setup
 
 followed https://www.twilio.com/blog/2017/06/writing-a-node-module-in-typescript.html for project setup
