@@ -22,9 +22,7 @@ export const useSelectionState = create<SelectionState>((set, get) => ({
     getSelection: (selectionKey: string) => {
         let selections = get().selections;
         if (selections[selectionKey]) return selections[selectionKey];
-        let newSelection = { ...selections, [selectionKey]: {} };
-        set({ selections: newSelection });
-        return newSelection[selectionKey];
+        return emptySelection;
     },
     select: (selectionKey: string, itemKeys: string[], multiple?: boolean) => {
         /**
