@@ -1,3 +1,4 @@
+import React from "react";
 import create from "zustand";
 
 type Selection = Record<string, boolean>;
@@ -57,12 +58,15 @@ export const useSelectionItem = (selectionKey: string, itemKey: string) => {
             !!getSelection(selectionKey)[itemKey]
     );
     let selectItem = useSelectionState(({ select }: SelectionState) => select);
-    let select = (multiple?: boolean) => {
-        selectItem(selectionKey, [itemKey], multiple);
-    };
-    let clear = () => {
+    let select = React.useCallback(
+        (multiple?: boolean) => {
+            selectItem(selectionKey, [itemKey], multiple);
+        },
+        [selectionKey, selectItem]
+    );
+    let clear = React.useCallback(() => {
         selectItem(selectionKey, []);
-    };
+    }, [selectionKey, selectItem]);
 
     return { selected, select, clear };
 };
@@ -70,13 +74,16 @@ export const useSelectionItem = (selectionKey: string, itemKey: string) => {
 export const useSelect = (selectionKey: string) => {
     let selectItem = useSelectionState(({ select }: SelectionState) => select);
 
-    let select = (itemKeys: string[], multiple?: boolean) => {
-        selectItem(selectionKey, itemKeys, multiple);
-    };
+    let select = React.useCallback(
+        (itemKeys: string[], multiple?: boolean) => {
+            selectItem(selectionKey, itemKeys, multiple);
+        },
+        [selectionKey, selectItem]
+    );
+    let clear = React.useCallback(() => {
+        selectItem(selectionKey, []);
+    }, [selectionKey, selectItem]);
 
-    let clear = () => {
-        return select([]);
-    };
     return {
         select,
         clear,
@@ -95,13 +102,15 @@ export const useSelection = (selectionKey: string) => {
         return !!selection[itemKey];
     };
 
-    let select = (itemKeys: string[], multiple?: boolean) => {
-        selectItem(selectionKey, itemKeys, multiple);
-    };
-
-    let clear = () => {
-        return select([]);
-    };
+    let select = React.useCallback(
+        (itemKeys: string[], multiple?: boolean) => {
+            selectItem(selectionKey, itemKeys, multiple);
+        },
+        [selectionKey, selectItem]
+    );
+    let clear = React.useCallback(() => {
+        selectItem(selectionKey, []);
+    }, [selectionKey, selectItem]);
 
     return {
         items,
