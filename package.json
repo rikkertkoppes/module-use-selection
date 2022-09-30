@@ -1,6 +1,6 @@
 {
     "name": "@rkmodules/use-selection",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -19,7 +19,7 @@
     },
     "homepage": "https://github.com/rikkertkoppes/module-use-selection#readme",
     "peerDependencies": {
-        "react": "^16.8.0"
+        "react": ">=16.8.0"
     },
     "devDependencies": {
         "@testing-library/user-event": "^13.2.1",
