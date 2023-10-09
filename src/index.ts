@@ -9,6 +9,7 @@ interface SelectionState {
         [key: string]: Selection;
     };
     getSelection: (selectionKey: string) => Selection;
+    setSelection: (selectionKey: string, selection: Selection) => void;
     select: (
         selectionKey: string,
         itemKeys: string[],
@@ -24,6 +25,9 @@ export const useSelectionState = create<SelectionState>((set, get) => ({
         let selections = get().selections;
         if (selections[selectionKey]) return selections[selectionKey];
         return emptySelection;
+    },
+    setSelection: (selectionKey: string, selection: Selection) => {
+        set({ selections: { ...get().selections, [selectionKey]: selection } });
     },
     select: (selectionKey: string, itemKeys: string[], multiple?: boolean) => {
         /**
