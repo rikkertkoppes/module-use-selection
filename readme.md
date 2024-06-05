@@ -9,17 +9,53 @@ npm install @rkmodules/use-selection
 ```
 
 ```typescript
-import useSelection from "@rkmodules/use-selection";
+// pick what you need, more info below
+import useSelection, {
+    useSelectionItem,
+    useSelect,
+    useSelectionState,
+} from "@rkmodules/use-selection";
 ```
 
-# behaviour
+## useSelection
 
-When the multiple flag is off, the items passed into `select` are selected. Everything else is deselected. So it disregards any existing selection
+```typescript
+let { selected, select, items, clear } = useSelection(selectionKey: string);
+```
 
-When the multiple flag is on, the bahaviour is twofold:
+-   `select(itemKeys: string[], multiple?: boolean)`:
+    -   when `multiple` is `false` and all items are already selected, they are deselected
+    -   when `multiple` is `false` otherwise, sets the selection to the given items
+    -   when `multiple` is `true` and all items are already selected, they are deselected
+    -   when `multiple` is `true` otherwise, all are added to the selection
+-   `selected(itemKey: string)`: checks whether an item is selected
+-   `clear()`: clears the selection
+-   `items`: the items in the selection
 
--   when all items passed into `select` are already selected, they are subtracted from the existing selection
--   otherwise, they are added to the existing selection
+## useSelectionItem
+
+```typescript
+let { selected, select, clear } = useSelectionItem(selectionKey: string, itemKey: string);
+```
+
+-   `select(multiple?: boolean)`:
+    -   when `multiple` is `false`, the item is toggled as the only item in the selection
+    -   when `multiple` is `true` the item is added or removed from the selection
+-   `selected()`: checks whether the item is selected
+-   `clear()`: clears the selection
+
+## useSelect
+
+```typescript
+let { select, clear } = useSelection(selectionKey: string);
+```
+
+-   `select(itemKeys: string[], multiple?: boolean)`:
+    -   when `multiple` is `false` and all items are already selected, they are deselected
+    -   when `multiple` is `false` otherwise, sets the selection to the given items
+    -   when `multiple` is `true` and all items are already selected, they are deselected
+    -   when `multiple` is `true` otherwise, all are added to the selection
+-   `clear()`: clears the selection
 
 # examples
 
