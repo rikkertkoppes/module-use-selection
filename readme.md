@@ -20,7 +20,7 @@ import useSelection, {
 ## useSelection
 
 ```typescript
-let { selected, select, items, clear } = useSelection(selectionKey: string);
+let { selected, select, items, clear } = useSelection(selectionKey: string, persist?: boolean);
 ```
 
 -   `select(itemKeys: string[], multiple?: boolean)`:
@@ -35,7 +35,7 @@ let { selected, select, items, clear } = useSelection(selectionKey: string);
 ## useSelectionItem
 
 ```typescript
-let { selected, select, clear } = useSelectionItem(selectionKey: string, itemKey: string);
+let { selected, select, clear } = useSelectionItem(selectionKey: string, itemKey: string, perist?: boolean);
 ```
 
 -   `select(multiple?: boolean)`:
@@ -47,7 +47,7 @@ let { selected, select, clear } = useSelectionItem(selectionKey: string, itemKey
 ## useSelect
 
 ```typescript
-let { select, clear } = useSelection(selectionKey: string);
+let { select, clear } = useSelection(selectionKey: string, persist?: boolean);
 ```
 
 -   `select(itemKeys: string[], multiple?: boolean)`:
