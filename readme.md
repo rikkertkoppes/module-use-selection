@@ -24,8 +24,7 @@ let { selected, select, items, clear } = useSelection(selectionKey: string, pers
 ```
 
 -   `select(itemKeys: string[], multiple?: boolean)`:
-    -   when `multiple` is `false` and all items are already selected, they are deselected
-    -   when `multiple` is `false` otherwise, sets the selection to the given items
+    -   when `multiple` is `false` sets the selection to the given items
     -   when `multiple` is `true` and all items are already selected, they are deselected
     -   when `multiple` is `true` otherwise, all are added to the selection
 -   `selected(itemKey: string)`: checks whether an item is selected
@@ -39,7 +38,7 @@ let { selected, select, clear } = useSelectionItem(selectionKey: string, itemKey
 ```
 
 -   `select(multiple?: boolean)`:
-    -   when `multiple` is `false`, the item is toggled as the only item in the selection
+    -   when `multiple` is `false`, the selection is set to the item
     -   when `multiple` is `true` the item is added or removed from the selection
 -   `selected()`: checks whether the item is selected
 -   `clear()`: clears the selection
@@ -51,8 +50,7 @@ let { select, clear } = useSelection(selectionKey: string, persist?: boolean);
 ```
 
 -   `select(itemKeys: string[], multiple?: boolean)`:
-    -   when `multiple` is `false` and all items are already selected, they are deselected
-    -   when `multiple` is `false` otherwise, sets the selection to the given items
+    -   when `multiple` is `false` sets the selection to the given items
     -   when `multiple` is `true` and all items are already selected, they are deselected
     -   when `multiple` is `true` otherwise, all are added to the selection
 -   `clear()`: clears the selection

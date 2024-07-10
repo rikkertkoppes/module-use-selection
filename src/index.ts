@@ -39,20 +39,21 @@ export const useSelectionStateOld = create<SelectionState>((set, get) => ({
         /**
          * when multiple is off
          * -> select only everything that was clicked, disregarding the old selection
-         * -> when item was selected, deselect
          * when multiple is on
          * -> if all items already selected, deselect them from the selection
          * -> otherwise, add them to the selection
+         *
+         * NOTE: we had the behaviour that when multiple is off and we click a selected item,
+         * that item is deselected, but this has been reverted to selecting the item
+         * Deselecting is not consistent with generic UI behaviour and also plays badly with double clicking
          */
         let selections = get().selections;
         let sel = selections[selectionKey] || {};
         let allSelected = itemKeys.every((key) => sel[key]);
-        // if multiple is on start new selection with existing selection
-        // otherwise empty
         let selection = multiple ? { ...sel } : {};
-        // for the given items, unselect if allSelected
-        // otherwise add to the selection
-        itemKeys.forEach((key) => (selection[key] = !allSelected));
+        itemKeys.forEach(
+            (key) => (selection[key] = !(multiple && allSelected))
+        );
         set({ selections: { ...selections, [selectionKey]: selection } });
     },
     clear: (selectionKey: string) => {
